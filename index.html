@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bomet Bible College</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("DOM fully loaded and parsed");
+            
+            const firebaseConfig = {
+                apiKey: "YOUR_API_KEY",
+                authDomain: "YOUR_AUTH_DOMAIN",
+                projectId: "YOUR_PROJECT_ID",
+                storageBucket: "YOUR_STORAGE_BUCKET",
+                messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+                appId: "YOUR_APP_ID"
+            };
+            
+            const app = initializeApp(firebaseConfig);
+            console.log("Firebase initialized:", app);
+            const auth = getAuth();
+            const db = getFirestore(app);
+            
+            // Google Login
+            document.getElementById("googleLogin").addEventListener("click", () => {
+                const provider = new GoogleAuthProvider();
+                signInWithPopup(auth, provider).then((result) => {
+                    console.log("User signed in:", result.user);
+                    document.getElementById("userDisplay").innerText = `Welcome, ${result.user.displayName}`;
+                }).catch((error) => {
+                    console.error("Login Error:", error);
+                });
+            });
+            
+            // Facebook Login
+            document.getElementById("facebookLogin").addEventListener("click", () => {
+                const provider = new FacebookAuthProvider();
+                signInWithPopup(auth, provider).then((result) => {
+                    console.log("User signed in:", result.user);
+                    document.getElementById("userDisplay").innerText = `Welcome, ${result.user.displayName}`;
+                }).catch((error) => {
+                    console.error("Login Error:", error);
+                });
+            });
+            
+            // Logout
+            document.getElementById("logout").addEventListener("click", () => {
+                signOut(auth).then(() => {
+                    document.getElementById("userDisplay").innerText = "You have logged out.";
+                }).catch((error) => {
+                    console.error("Logout Error:", error);
+                });
+            });
+        });
+    </script>
+</head>
+<body class="bg-light text-center">
+    <header class="bg-dark text-white p-4">
+        <h1>Bomet Bible College</h1>
+        <p>Empowering students with biblical knowledge and leadership skills.</p>
+        <button class="btn btn-primary" onclick="location.href='#registration'">Apply Now</button>
+        <button class="btn btn-success" onclick="location.href='#donate'">Donate</button>
+        <button class="btn btn-info" onclick="location.href='#contact'">Contact Us</button>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">BBC</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#programs">Programs & Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#admissions">Admissions</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#registration">Apply Online</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portal">Student Portal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#donate">Donate</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section id="portal" class="container my-5 p-4 bg-white shadow-sm rounded">
+        <h2>Student Portal</h2>
+        <p id="userDisplay">Login to access course materials and grades.</p>
+        <button id="googleLogin" class="btn btn-danger">Login with Google</button>
+        <button id="facebookLogin" class="btn btn-primary">Login with Facebook</button>
+        <button id="logout" class="btn btn-secondary">Logout</button>
+    </section>
+    <section id="donate" class="container my-5 p-4 bg-white shadow-sm rounded">
+        <h2>Support Bomet Bible College</h2>
+        <p>Your donation helps support our mission to educate and train future leaders.</p>
+        <form action="https://www.paypal.com/donate" method="post" target="_blank">
+            <input type="hidden" name="business" value="bometbiblecollege@gmail.com">
+            <input type="hidden" name="currency_code" value="USD">
+            <button type="submit" class="btn btn-primary">Donate via PayPal</button>
+        </form>
+        <p class="mt-3">Or donate via M-Pesa: <strong>0725380543</strong></p>
+        <p>Bank Transfer: <strong>Account: 7770173530474</strong></p>
+    </section>
+</body>
+</html>
